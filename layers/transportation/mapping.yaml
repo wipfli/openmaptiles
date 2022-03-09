@@ -163,6 +163,10 @@ expressway_field: &expressway
   key: expressway
   name: expressway
   type: bool
+tracktype_field: &tracktype
+  key: tracktype
+  name: tracktype
+  type: string
 
 tables:
 # etldoc: imposm3 -> osm_highway_linestring
@@ -211,6 +215,7 @@ tables:
     - *sac_scale
     - *surface
     - *expressway
+    - *tracktype
     mapping:
       highway:
       - motorway
