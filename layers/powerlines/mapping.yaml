@@ -1,0 +1,104 @@
+generalized_tables:
+  # etldoc: osm_powerlines_linestring_gen_z11 -> osm_powerlines_linestring_gen_z10
+  powerlines_linestring_gen_z10:
+    source: powerlines_linestring_gen_z11
+    tolerance: ZRES11
+
+  # etldoc: osm_powerlines_linestring_gen_z12 -> osm_powerlines_linestring_gen_z11
+  powerlines_linestring_gen_z11:
+    source: powerlines_linestring_gen_z12
+    tolerance: ZRES12
+
+  # etldoc: osm_powerlines_linestring -> osm_powerlines_linestring_gen_z12
+  powerlines_linestring_gen_z12:
+    source: powerlines_linestring
+    sql_filter: ST_IsValid(geometry)
+    tolerance: ZRES13
+
+  # etldoc: osm_powerlines_polygon_gen_z11 -> osm_powerlines_polygon_gen_z10
+  powerlines_polygon_gen_z10:
+    source: powerlines_polygon_gen_z11
+    sql_filter: area>power(ZRES9,2)
+    tolerance: ZRES10
+
+  # etldoc: osm_powerlines_polygon_gen_z12 -> osm_powerlines_polygon_gen_z11
+  powerlines_polygon_gen_z11:
+    source: powerlines_polygon_gen_z12
+    sql_filter: area>power(ZRES10,2)
+    tolerance: ZRES11
+
+  # etldoc: osm_powerlines_polygon_gen_z13 -> osm_powerlines_polygon_gen_z12
+  powerlines_polygon_gen_z12:
+    source: powerlines_polygon_gen_z13
+    sql_filter: area>power(ZRES11,2)
+    tolerance: ZRES12
+
+  # etldoc: osm_powerlines_polygon -> osm_powerlines_polygon_gen_z13
+  powerlines_polygon_gen_z13:
+    source: powerlines_polygon
+    sql_filter: area>power(ZRES12,2) AND ST_IsValid(geometry)
+    tolerance: ZRES13
+
+ref_field: &ref
+  key: ref
+  name: ref
+  type: string
+
+def_powerlines_polygon_mapping: &powerlines_polygon_mapping
+  - aerodrome
+  - heliport
+  - runway
+  - helipad
+  - taxiway
+  - apron
+
+tables:
+  # etldoc: imposm3 -> osm_powerlines_polygon
+  powerlines_polygon:
+    type: polygon
+    columns:
+    - *ref
+    - name: osm_id
+      type: id
+    - name: geometry
+      type: geometry
+    - name: powerlines
+      type: mapping_value
+    - name: area
+      type: area
+    mapping:
+      powerlines: *powerlines_polygon_mapping
+      "area:powerlines": *powerlines_polygon_mapping
+
+  # etldoc: imposm3 -> osm_powerlines_linestring
+  powerlines_linestring:
+    type: linestring
+    columns:
+    - *ref
+    - name: osm_id
+      type: id
+    - name: geometry
+      type: geometry
+    - name: powerlines
+      key: powerlines
+      type: string
+    mapping:
+      powerlines:
+      - runway
+      - taxiway
+      
+  # etldoc: imposm3 -> osm_powerlines_point
+  powerlines_point:
+    type: point
+    columns:
+    - *ref
+    - name: osm_id
+      type: id
+    - name: geometry
+      type: geometry
+    - name: powerlines
+      key: powerlines
+      type: string
+    mapping:
+      powerlines:
+      - gate

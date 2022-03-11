@@ -8,6 +8,7 @@ tileset:
     - layers/park/park.yaml
     - layers/boundary/boundary.yaml
     - layers/aeroway/aeroway.yaml
+    - layers/powerlines/powerlines.yaml
     - layers/transportation/transportation.yaml
     - layers/building/building.yaml
     - layers/water_name/water_name.yaml
