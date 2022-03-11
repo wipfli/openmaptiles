@@ -1,0 +1,38 @@
+generalized_tables:
+  # etldoc: osm_power_linestring_gen_z11 -> osm_power_linestring_gen_z10
+  power_linestring_gen_z10:
+    source: power_linestring_gen_z11
+    tolerance: ZRES11
+
+  # etldoc: osm_power_linestring_gen_z12 -> osm_power_linestring_gen_z11
+  power_linestring_gen_z11:
+    source: power_linestring_gen_z12
+    tolerance: ZRES12
+
+  # etldoc: osm_power_linestring -> osm_power_linestring_gen_z12
+  power_linestring_gen_z12:
+    source: power_linestring
+    sql_filter: ST_IsValid(geometry)
+    tolerance: ZRES13
+
+power_field: &power
+  key: power
+  name: power
+  type: string
+
+tables:
+  # etldoc: imposm3 -> osm_power_linestring
+  power_linestring:
+    type: linestring
+    columns:
+    - name: osm_id
+      type: id
+    - name: geometry
+      type: geometry
+    - name: power
+      key: power
+      type: string
+    mapping:
+      power:
+      - line
+      - minor_line
